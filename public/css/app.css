@@ -1,0 +1,36 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 100%;
+  min-height: 100vh;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-justify-center {
+  justify-content: center;
+}
+
+.flex-align-center {
+  align-items: center;
+}
+
+.flex-align-end {
+  align-items: end;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
+.half-viewport-width {
+  width: 50vw;
+}
+
+.half-viewport-height {
+  height: 50vh;
+}
+

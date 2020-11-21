@@ -1,22 +1,14 @@
-import axios from 'axios';
-import Chart from 'chart.js';
+import axios from "axios";
+import Vue from "vue";
+import Graph from "../components/Graph.vue";
 
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-var data = {
-  labels: ['January', 'February', 'March'],
-  datasets: [
-    {
-      data: [30, 122, 90]
-    }
-  ]
-}
-
+axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 document.addEventListener("DOMContentLoaded", function() {
-  var context = document.querySelector('#graph').getContext('2d');
-  new Chart(context, {
-    type: "line",
-    data: data,
-  })
+    new Vue({
+        el: "#root",
+        components: {
+          Graph,
+        }
+    });
 });
