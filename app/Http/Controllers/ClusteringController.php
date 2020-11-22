@@ -138,7 +138,7 @@ class ClusteringController extends Controller
 
     $data = $clusters->toArray();
     arsort($data);
-    return view('offender_ages_vs_offense_type', compact("data"));
+    return view('offender_ages_vs_offense_type', compact("data", "ignore_unknown_age"));
   }
 
   public function offender_ages_vs_offense_type_kmeans(Request $request) {
@@ -182,7 +182,7 @@ class ClusteringController extends Controller
 
     $data = $clusters->toArray();
     arsort($data);
-    return view('offender_ages_vs_offense_type', compact("data"));
+    return view('offender_ages_vs_offense_type', compact("data", "ignore_unknown_age"));
   }
 
   public function categorize_age($age) {
