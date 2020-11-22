@@ -1,6 +1,6 @@
 @extends('layouts/layout')
 
-@section('title', 'Offense VS Location')
+@section('title', 'Offender by Age')
 
 @section('content')
   <div id="root">
