@@ -166,7 +166,7 @@ class ClusteringController extends Controller
     });
 
     $samples = array_filter($data->toArray(), static function($value){return $value !== null;} );
-    $k_clusters = $ignore_unknown_age ? 17 : 37;
+    $k_clusters = $ignore_unknown_age ? 76 : 98;
     $kmeans = new KMeans($k_clusters);
     $clusters = collect($kmeans->cluster($samples));
 
