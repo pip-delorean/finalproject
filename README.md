@@ -9,7 +9,6 @@ Install [Composer](https://getcomposer.org/), PHP's package manager.
 Install [NPM](https://www.npmjs.com/).
 Install PHP version 7.3+ and the following PHP extensions:
 
-- PHP >= 7.3
 - BCMath PHP Extension
 - Ctype PHP Extension
 - Fileinfo PHP Extension
