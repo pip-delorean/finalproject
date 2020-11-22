@@ -3,6 +3,8 @@
 
 This project was written using the [Laravel PHP Frawework](https://laravel.com/docs) (version 8) with [Vue.js](https://vuejs.org/) and [Chart.js](https://www.chartjs.org/).
 
+This was developed on Ubuntu Linux.
+
 The database used was [MySQL](https://www.mysql.com/).
 
 To get this running on your machine:
