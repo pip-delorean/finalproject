@@ -3,8 +3,6 @@
 
 This project was written using the [Laravel PHP Frawework](https://laravel.com/docs) (version 8) with [Vue.js](https://vuejs.org/) and [Chart.js](https://www.chartjs.org/).
 
-This was developed on Ubuntu Linux.
-
 The database used was [MySQL](https://www.mysql.com/).
 
 To get this running on your machine:
@@ -40,7 +38,7 @@ DB_PASSWORD=<your db password>
 
 Laravel database configuration (if you aren't using mysql): https://laravel.com/docs/8.x/database#configuration
 
-With a terminal, cd to the FinalProject directory and run `php artisan serve`
+With a terminal, cd to the FinalProject directory and run `composer install; npm install; php artisan serve`
 
 This will start a web server running at `localhost:8000`, which you can navigate to with a web browser.
 The index page should offer navigation to all the available analyses.
