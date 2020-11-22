@@ -4,7 +4,7 @@
 
 @section('content')
   <div id="root">
-    <div class="flex flex-justify-center flex-align-end">
+    <div class="flex flex-justify-center flex-align-center flex-direction-column">
       <h1>Nebraska 2018 FBI Crime Statistics</h1>
       <h2>Choose a visualization/analysis (Most should run in a minute or less):</h2>
       <ul>
