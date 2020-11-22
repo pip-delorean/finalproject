@@ -3,13 +3,15 @@
 
 This project was written using the [Laravel PHP Frawework](https://laravel.com/docs) (version 8) with [Vue.js](https://vuejs.org/) and [Chart.js](https://www.chartjs.org/).
 
+The database used was [MySQL](https://www.mysql.com/).
+
 To get this running on your machine:
 
 Install [Composer](https://getcomposer.org/), PHP's package manager.
 
 Install [NPM](https://www.npmjs.com/).
 
-Install PHP version 7.3+ and the following PHP extensions:
+Install [PHP](https://www.php.net/) version 7.3+ and the following PHP extensions:
 
 - BCMath PHP Extension
 - Ctype PHP Extension
@@ -23,7 +25,20 @@ Install PHP version 7.3+ and the following PHP extensions:
 
 Run the command `composer global require laravel/installer`
 
-cd to the FinalProject directory and run `php artisan serve`
+Go into the FinalProject directory and edit the file `.env`. Look at the Database configuration block:
 
-This will start a web server running at localhost:8000, which you can navigate to with a web browser.
+```
+DB_CONNECTION=mysql (if using a different database driver, see below)
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=finalproject
+DB_USERNAME=<your db username>
+DB_PASSWORD=<your db password>
+```
+
+Laravel database configuration: https://laravel.com/docs/8.x/database#configuration
+
+With a terminal, cd to the FinalProject directory and run `php artisan serve`
+
+This will start a web server running at `localhost:8000`, which you can navigate to with a web browser.
 The index page should offer navigation to all the available analyses.
