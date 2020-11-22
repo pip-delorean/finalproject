@@ -10,10 +10,11 @@ use App\Models\WeaponType;
 use App\Models\OffenseType;
 use Phpml\Clustering\DBSCAN;
 use Phpml\Clustering\KMeans;
+use Log;
 
 class ClusteringController extends Controller
 {
-  public function dbscan(Request $request) {
+  public function offense_type_vs_weapon_type_dbscan(Request $request) {
     $ignore_unknown_weapon = $request->input('ignore_unknown_weapon') ?? true;
     set_time_limit(10000);
 
@@ -54,7 +55,7 @@ class ClusteringController extends Controller
     return view('offense_type_vs_weapon_type', compact("data", "ignore_unknown_weapon"));
   }
 
-  public function kmeans(Request $request) {
+  public function offense_type_vs_weapon_type_kmeans(Request $request) {
     $ignore_unknown_weapon = $request->input('ignore_unknown_weapon') ?? true;
     set_time_limit(10000);
 
@@ -95,5 +96,134 @@ class ClusteringController extends Controller
     $data = $clusters->toArray();
     arsort($data);
     return view('offense_type_vs_weapon_type', compact("data", "ignore_unknown_weapon"));
+  }
+
+  public function offender_ages_vs_offense_type_dbscan(Request $request) {
+    $ignore_unknown_age = $request->input('ignore_unknown_age') ?? true;
+    set_time_limit(10000);
+
+    if ($ignore_unknown_age === "false") {
+      $ignore_unknown_age = false;
+    } else {
+      $ignore_unknown_age = true;
+    }
+
+    $offenses = Offense::select('OFFENSE_ID', 'INCIDENT_ID', 'OFFENSE_TYPE_ID')->with('incident', 'incident.offender', 'type')->get();
+    $data = $offenses->map(function ($offense) use ($ignore_unknown_age) {
+      $age = $offense->incident->offender->AGE_NUM ?? null;
+      if ($age === null) {
+        return null;
+      }
+      if ($age === "") {
+        $age = $ignore_unknown_age ? null : -1;
+      }
+      $age_range_id = array_keys($this->categorize_age($age))[0];
+      $type_id = $offense->type->OFFENSE_TYPE_ID;
+      return [$type_id, $age_range_id];
+    });
+
+    $samples = array_filter($data->toArray(), static function($value){return $value !== null;} );
+    $dbscan = new DBSCAN($epsilon = 1, $minSamples = 50);
+    $clusters = collect($dbscan->cluster($samples));
+
+    foreach ($clusters as $cluster_id => $cluster) {
+      $first_item = array_values($cluster)[0];
+      $age_range_id = $first_item[1];
+      $age_range_name = $this->age_range_labelize($age_range_id);
+      $offense_name = OffenseType::find($first_item[0])->OFFENSE_NAME;
+      $cluster_name = $age_range_name." + ".$offense_name;
+      $clusters[$cluster_name] = sizeof($cluster);
+      unset($clusters[$cluster_id]);
+    }
+
+    $data = $clusters->toArray();
+    arsort($data);
+    return view('offender_ages_vs_offense_type', compact("data"));
+  }
+
+  public function offender_ages_vs_offense_type_kmeans(Request $request) {
+    $ignore_unknown_age = $request->input('ignore_unknown_age') ?? true;
+    set_time_limit(10000);
+
+    if ($ignore_unknown_age === "false") {
+      $ignore_unknown_age = false;
+    } else {
+      $ignore_unknown_age = true;
+    }
+
+    $offenses = Offense::select('OFFENSE_ID', 'INCIDENT_ID', 'OFFENSE_TYPE_ID')->with('incident', 'incident.offender', 'type')->get();
+    $data = $offenses->map(function ($offense) use ($ignore_unknown_age) {
+      $age = $offense->incident->offender->AGE_NUM ?? null;
+      if ($age === null) {
+        return null;
+      }
+      if ($age === "") {
+        $age = $ignore_unknown_age ? null : -1;
+      }
+      $age_range_id = array_keys($this->categorize_age($age))[0];
+      $type_id = $offense->type->OFFENSE_TYPE_ID;
+      return [$type_id, $age_range_id];
+    });
+
+    $samples = array_filter($data->toArray(), static function($value){return $value !== null;} );
+    $k_clusters = 10;
+    $kmeans = new KMeans($k_clusters);
+    $clusters = collect($kmeans->cluster($samples));
+
+    foreach ($clusters as $cluster_id => $cluster) {
+      $first_item = array_values($cluster)[0];
+      $age_range_id = $first_item[1];
+      $age_range_name = $this->age_range_labelize($age_range_id);
+      $offense_name = OffenseType::find($first_item[0])->OFFENSE_NAME;
+      $cluster_name = $age_range_name." + ".$offense_name;
+      $clusters[$cluster_name] = sizeof($cluster);
+      unset($clusters[$cluster_id]);
+    }
+
+    $data = $clusters->toArray();
+    arsort($data);
+    return view('offender_ages_vs_offense_type', compact("data"));
+  }
+
+  public function categorize_age($age) {
+    if ($age === -1) {
+      return [1 => "Unknown/Not Specified"];
+    }
+    if ($age >= 0 && $age <= 12) {
+      return [2 => "0-12"];
+    }
+    if ($age >= 13 && $age <= 19) {
+      return [3 => "13-19"];
+    }
+    if ($age >= 20 && $age <= 30) {
+      return [4 => "20-30"];
+    }
+    if ($age >= 31 && $age <= 40) {
+      return [5 => "31-40"];
+    }
+    if ($age >= 41 && $age <= 60) {
+      return [6 => "41-60"];
+    }
+    if ($age >= 61 && $age <= 80) {
+      return [7 => "61-80"];
+    }
+    if ($age >= 81) {
+      return [8 => "81+"];
+    }
+    return [1 => "Unknown/Not Specified"];
+  }
+
+  public function age_range_labelize($range_id) {
+    $label_array = [
+      1 => "Unknown/Not Specified",
+      2 => "0-12",
+      3 => "13-19",
+      4 => "20-30",
+      5 => "31-40",
+      6 => "41-60",
+      7 => "61-80",
+      8 => "81+",
+    ];
+    return $label_array[$range_id];
   }
 }

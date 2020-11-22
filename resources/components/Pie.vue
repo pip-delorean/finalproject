@@ -5,17 +5,30 @@
 <script type="text/javascript">
 import Chart from "chart.js";
 
-function backgroundColors(length) {
-    let colors = [];
-    for (var i = 0; i < length; i++) {
-        const randomColor = 'rgb(' +
-            Math.round(Math.random() * 255) + ',' +
-            Math.round(Math.random() * 255) + ',' +
-            Math.round(Math.random() * 255) +
-            ')';
+function hash_to_number(string) {
+  let arr = string.split('');
+  return arr.reduce(
+    (hashCode, currentVal) =>
+      (hashCode = currentVal.charCodeAt(0) + (hashCode << 6) + (hashCode << 16) - hashCode),
+    0
+  );
+};
+
+function transform_to_rgb(number) {
+  const percent = (parseInt(number) - -1000) / (1000 - -1000);
+  return Math.round(percent * (255));
+}
+
+function backgroundColors(keys) {
+    const colors = [];
+    for (var i = 0; i < keys.length; i++) {
+        const hash = String(hash_to_number(keys[i]));
+        const red = transform_to_rgb(hash.substring(1,4));
+        const green = transform_to_rgb(hash.substring(4,7));
+        const blue = transform_to_rgb(hash.substring(7,10));
+        const randomColor = `rgb(${red}, ${green}, ${blue})`;
         colors.push(randomColor);
     }
-    console.log(colors);
     return colors;
 }
 
@@ -45,7 +58,7 @@ export default {
                 labels: this.keys,
                 datasets: [{
                     data: this.values,
-                    backgroundColor: backgroundColors(this.keys.length),
+                    backgroundColor: backgroundColors(this.keys),
                 }]
             },
             chart: null,

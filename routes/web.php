@@ -19,5 +19,7 @@ Route::get('/', [ChartController::class, 'index']);
 Route::get('/offender_ages', [ChartController::class, 'offender_ages']);
 Route::get('/offense_vs_location', [ChartController::class, 'offense_vs_location']);
 
-Route::get('/offense_type_vs_weapon_type_dbscan', [ClusteringController::class, 'dbscan']);
-Route::get('/offense_type_vs_weapon_type_kmeans', [ClusteringController::class, 'kmeans']);
+Route::get('/offense_type_vs_weapon_type_dbscan', [ClusteringController::class, 'offense_type_vs_weapon_type_dbscan']);
+Route::get('/offense_type_vs_weapon_type_kmeans', [ClusteringController::class, 'offense_type_vs_weapon_type_kmeans']);
+Route::get('/offender_ages_vs_offense_type_dbscan', [ClusteringController::class, 'offender_ages_vs_offense_type_dbscan']);
+Route::get('/offender_ages_vs_offense_type_kmeans', [ClusteringController::class, 'offender_ages_vs_offense_type_kmeans']);

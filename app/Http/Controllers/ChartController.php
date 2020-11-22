@@ -15,7 +15,16 @@ class ChartController extends Controller
     return view('index');
   }
 
-  public function offender_ages() {
+  public function offender_ages(Request $request) {
+    $ignore_unknown_age = $request->input('ignore_unknown_age') ?? true;
+    set_time_limit(10000);
+
+    if ($ignore_unknown_age === "false") {
+      $ignore_unknown_age = false;
+    } else {
+      $ignore_unknown_age = true;
+    }
+
     set_time_limit(10000);
     $offenses = Offense::select('OFFENSE_ID', 'INCIDENT_ID')->with('incident', 'incident.offender')->get();
     $data = [
@@ -30,8 +39,11 @@ class ChartController extends Controller
     ];
 
     foreach ($offenses as $offense) {
+      if ($offense->incident === null || $offense->incident->offender === null) {
+        continue;
+      }
       $age = $offense->incident->offender->AGE_NUM ?? null;
-      if ($age == null) {
+      if ($age === null) {
         $data["Unknown/Not Specified"] += 1;
         continue;
       }
@@ -64,6 +76,9 @@ class ChartController extends Controller
         continue;
       }
     };
+    if ($ignore_unknown_age) {
+      unset($data["Unknown/Not Specified"]);
+    }
     return view('offender_ages', compact('data'));
   }
 
