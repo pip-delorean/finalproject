@@ -78,7 +78,8 @@ class ClusteringController extends Controller
 
     $samples = array_filter($data->toArray(), static function($value){return $value !== null;} );
 
-    $kmeans = new KMeans(17);
+    $k_clusters = $ignore_unknown_weapon ? 17 : 37;
+    $kmeans = new KMeans($k_clusters);
     $clusters = collect($kmeans->cluster($samples));
 
     foreach ($clusters as $cluster_id => $cluster) {
