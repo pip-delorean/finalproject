@@ -16,6 +16,10 @@ class Offense extends Model
       return $this->belongsTo('App\Models\OffenseType', 'OFFENSE_TYPE_ID', 'OFFENSE_TYPE_ID');
     }
 
+    function incident() {
+      return $this->belongsTo('App\Models\Incident', 'INCIDENT_ID', 'INCIDENT_ID');
+    }
+
     function weapon() {
       return $this->belongsTo('App\Models\Weapon', 'OFFENSE_ID', 'OFFENSE_ID');
     }

@@ -16,7 +16,8 @@ use App\Http\Controllers\ClusteringController;
 */
 
 Route::get('/', [ChartController::class, 'index']);
-Route::get('/dbscan', [ClusteringController::class, 'dbscan']);
-Route::get('/incidents', [ChartController::class, 'incidents']);
+Route::get('/offender_ages', [ChartController::class, 'offender_ages']);
 Route::get('/offense_vs_location', [ChartController::class, 'offense_vs_location']);
-Route::get('/offense_type_vs_weapon_type', [ChartController::class, 'offense_type_vs_weapon_type']);
+
+Route::get('/offense_type_vs_weapon_type_dbscan', [ClusteringController::class, 'dbscan']);
+Route::get('/offense_type_vs_weapon_type_kmeans', [ClusteringController::class, 'kmeans']);

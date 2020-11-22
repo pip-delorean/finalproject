@@ -29,17 +29,9 @@ export default {
             type: Array,
             required: true
         },
-        type: {
-            type: String,
-            required: true
-        },
-        xlabel: {
-            type: String,
-            required: true
-        },
-        ylabel: {
-            type: String,
-            required: true
+        isdoughnut: {
+            type: Boolean,
+            required: false
         },
         title: {
           type: String,
@@ -53,8 +45,6 @@ export default {
                 labels: this.keys,
                 datasets: [{
                     data: this.values,
-                    yAxisID: this.ylabel,
-                    xAxisID: this.xlabel,
                     backgroundColor: backgroundColors(this.keys.length),
                 }]
             },
@@ -65,11 +55,11 @@ export default {
 
     mounted() {
         this.chart = new Chart(this.$el.getContext("2d"), {
-            type: this.type,
+            type: this.isdoughnut === true ? "doughnut" : "pie",
             data: this.data,
             options: {
                 legend: {
-                    display: false,
+                    display: true,
                 },
                 title: {
                     display: true,
@@ -83,22 +73,6 @@ export default {
                         bottom: 25
                     }
                 },
-                scales: {
-                    yAxes: [{
-                        id: this.ylabel,
-                        scaleLabel: {
-                            display: true,
-                            labelString: this.ylabel,
-                        }
-                    }],
-                    xAxes: [{
-                        id: this.xlabel,
-                        scaleLabel: {
-                            display: true,
-                            labelString: this.xlabel,
-                        }
-                    }]
-                }
             },
         });
     }
