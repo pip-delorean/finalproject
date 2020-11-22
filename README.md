@@ -36,7 +36,7 @@ DB_USERNAME=<your db username>
 DB_PASSWORD=<your db password>
 ```
 
-Laravel database configuration: https://laravel.com/docs/8.x/database#configuration
+Laravel database configuration (if you aren't using mysql): https://laravel.com/docs/8.x/database#configuration
 
 With a terminal, cd to the FinalProject directory and run `php artisan serve`
 
