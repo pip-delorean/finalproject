@@ -15,6 +15,18 @@ export default {
             type: Array,
             required: true
         },
+        type: {
+            type: String,
+            required: true
+        },
+        xlabel: {
+            type: String,
+            required: true
+        },
+        ylabel: {
+            type: String,
+            required: true
+        }
     },
 
     data() {
@@ -22,7 +34,9 @@ export default {
             data: {
                 labels: this.keys,
                 datasets: [{
-                    data: this.values
+                    data: this.values,
+                    yAxisID: this.ylabel,
+                    xAxisID: this.xlabel,
                 }]
             },
             chart: null,
@@ -32,8 +46,37 @@ export default {
 
     mounted() {
         this.chart = new Chart(this.$el.getContext("2d"), {
-            type: "line",
-            data: this.data
+            type: this.type,
+            data: this.data,
+            options: {
+                legend: {
+                    display: false,
+                },
+                layout: {
+                    padding: {
+                        left: 25,
+                        right: 25,
+                        top: 25,
+                        bottom: 25
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        id: this.ylabel,
+                        scaleLabel: {
+                            display: true,
+                            labelString: this.ylabel,
+                        }
+                    }],
+                    xAxes: [{
+                        id: this.xlabel,
+                        scaleLabel: {
+                            display: true,
+                            labelString: this.xlabel,
+                        }
+                    }]
+                }
+            },
         });
     }
 }

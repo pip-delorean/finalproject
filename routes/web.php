@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\IncidentController;
+use App\Http\Controllers\ChartController;
+use App\Http\Controllers\ClusteringController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +15,8 @@ use App\Http\Controllers\IncidentController;
 |
 */
 
-Route::get('/', [IncidentController::class, 'show']);
+Route::get('/', [ChartController::class, 'index']);
+Route::get('/dbscan', [ClusteringController::class, 'dbscan']);
+Route::get('/incidents', [ChartController::class, 'incidents']);
+Route::get('/offense_vs_location', [ChartController::class, 'offense_vs_location']);
+Route::get('/offense_type_vs_weapon_type', [ChartController::class, 'offense_type_vs_weapon_type']);

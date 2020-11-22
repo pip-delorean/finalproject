@@ -1924,6 +1924,18 @@ __webpack_require__.r(__webpack_exports__);
     values: {
       type: Array,
       required: true
+    },
+    type: {
+      type: String,
+      required: true
+    },
+    xlabel: {
+      type: String,
+      required: true
+    },
+    ylabel: {
+      type: String,
+      required: true
     }
   },
   data: function data() {
@@ -1931,7 +1943,9 @@ __webpack_require__.r(__webpack_exports__);
       data: {
         labels: this.keys,
         datasets: [{
-          data: this.values
+          data: this.values,
+          yAxisID: this.ylabel,
+          xAxisID: this.xlabel
         }]
       },
       chart: null
@@ -1939,8 +1953,37 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.chart = new chart_js__WEBPACK_IMPORTED_MODULE_0___default.a(this.$el.getContext("2d"), {
-      type: "line",
-      data: this.data
+      type: this.type,
+      data: this.data,
+      options: {
+        legend: {
+          display: false
+        },
+        layout: {
+          padding: {
+            left: 25,
+            right: 25,
+            top: 25,
+            bottom: 25
+          }
+        },
+        scales: {
+          yAxes: [{
+            id: this.ylabel,
+            scaleLabel: {
+              display: true,
+              labelString: this.ylabel
+            }
+          }],
+          xAxes: [{
+            id: this.xlabel,
+            scaleLabel: {
+              display: true,
+              labelString: this.xlabel
+            }
+          }]
+        }
+      }
     });
   }
 });
