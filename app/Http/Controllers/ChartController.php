@@ -8,6 +8,7 @@ use App\Models\Offense;
 use App\Models\Location;
 use App\Models\Weapon;
 use App\Models\Offender;
+use Log;
 
 class ChartController extends Controller
 {
@@ -29,7 +30,7 @@ class ChartController extends Controller
     $offenses = Offense::select('OFFENSE_ID', 'INCIDENT_ID')->with('incident', 'incident.offender')->get();
     $data = [
       "Unknown/Not Specified" => 0,
-      "0-12" => 0,
+      "1-12" => 0,
       "13-19" => 0,
       "20-30" => 0,
       "31-40" => 0,
@@ -43,12 +44,12 @@ class ChartController extends Controller
         continue;
       }
       $age = $offense->incident->offender->AGE_NUM ?? null;
-      if ($age === null) {
+      if ($age === null || $age === 0) {
         $data["Unknown/Not Specified"] += 1;
         continue;
       }
-      if ($age >= 0 && $age <= 12) {
-        $data["0-12"] += 1;
+      if ($age > 0 && $age <= 12) {
+        $data["1-12"] += 1;
         continue;
       }
       if ($age >= 13 && $age <= 19) {

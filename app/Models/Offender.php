@@ -11,4 +11,8 @@ class Offender extends Model
 
     protected $table = 'NIBRS_OFFENDER';
     protected $primaryKey = 'OFFENDER_ID';
+
+    protected $casts = [
+        'AGE_NUM' => 'integer',
+    ];
 }

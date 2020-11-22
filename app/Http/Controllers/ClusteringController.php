@@ -111,11 +111,11 @@ class ClusteringController extends Controller
     $offenses = Offense::select('OFFENSE_ID', 'INCIDENT_ID', 'OFFENSE_TYPE_ID')->with('incident', 'incident.offender', 'type')->get();
     $data = $offenses->map(function ($offense) use ($ignore_unknown_age) {
       $age = $offense->incident->offender->AGE_NUM ?? null;
+      if ($age === 0) {
+        $age = $ignore_unknown_age ? null : -1;
+      }
       if ($age === null) {
         return null;
-      }
-      if ($age === "") {
-        $age = $ignore_unknown_age ? null : -1;
       }
       $age_range_id = array_keys($this->categorize_age($age))[0];
       $type_id = $offense->type->OFFENSE_TYPE_ID;
@@ -154,11 +154,11 @@ class ClusteringController extends Controller
     $offenses = Offense::select('OFFENSE_ID', 'INCIDENT_ID', 'OFFENSE_TYPE_ID')->with('incident', 'incident.offender', 'type')->get();
     $data = $offenses->map(function ($offense) use ($ignore_unknown_age) {
       $age = $offense->incident->offender->AGE_NUM ?? null;
+      if ($age === 0) {
+        $age = $ignore_unknown_age ? null : -1;
+      }
       if ($age === null) {
         return null;
-      }
-      if ($age === "") {
-        $age = $ignore_unknown_age ? null : -1;
       }
       $age_range_id = array_keys($this->categorize_age($age))[0];
       $type_id = $offense->type->OFFENSE_TYPE_ID;
@@ -166,7 +166,7 @@ class ClusteringController extends Controller
     });
 
     $samples = array_filter($data->toArray(), static function($value){return $value !== null;} );
-    $k_clusters = 10;
+    $k_clusters = $ignore_unknown_age ? 17 : 37;
     $kmeans = new KMeans($k_clusters);
     $clusters = collect($kmeans->cluster($samples));
 
@@ -189,8 +189,8 @@ class ClusteringController extends Controller
     if ($age === -1) {
       return [1 => "Unknown/Not Specified"];
     }
-    if ($age >= 0 && $age <= 12) {
-      return [2 => "0-12"];
+    if ($age > 0 && $age <= 12) {
+      return [2 => "1-12"];
     }
     if ($age >= 13 && $age <= 19) {
       return [3 => "13-19"];
@@ -216,7 +216,7 @@ class ClusteringController extends Controller
   public function age_range_labelize($range_id) {
     $label_array = [
       1 => "Unknown/Not Specified",
-      2 => "0-12",
+      2 => "1-12",
       3 => "13-19",
       4 => "20-30",
       5 => "31-40",
